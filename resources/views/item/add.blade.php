@@ -3,7 +3,7 @@
 @section('title', '商品登録')
 
 @section('content_header')
-    <h1>商品登録</h1>
+    <h1 class="">商品登録</h1>
 @stop
 
 @section('content')
@@ -34,9 +34,20 @@
                         </div>
 
                         <div class="form-group">
+                            <label for="detail">産地</label>
+                            <input type="text" class="form-control" id="detail" name="detail" placeholder="産地">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="detail">消費期限</label>
+                            <input type="text" class="form-control" id="detail" name="detail" placeholder="消費期限">
+                        </div>
+
+                        <div class="form-group">
                             <label for="detail">詳細</label>
                             <input type="text" class="form-control" id="detail" name="detail" placeholder="詳細説明">
                         </div>
+
                     </div>
 
                     <div class="card-footer">
