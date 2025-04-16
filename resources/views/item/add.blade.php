@@ -23,34 +23,52 @@
                 <form method="POST">
                     @csrf
                     <div class="card-body">
-                        <div class="form-group">
-                            <label for="name">名前</label>
+                        <div class="form-group mb-5">
+                            <label for="name">商品名</label>
                             <input type="text" class="form-control" id="name" name="name" placeholder="名前">
                         </div>
 
-                        <div class="form-group">
-                            <label for="type">種別</label>
-                            <input type="text" class="form-control" id="type" name="type" placeholder="種別">
+                        <div class="d-flex mb-3 justify-content-around">
+                            <div class="form-group w-50">
+                                <label for="type">商品の種類</label>
+                                <select id="type" name="type" class="form-control" placeholder="商品の種類">
+                                    <option value="1">コーヒー豆</option>
+                                    <option value="2">その他材料</option>
+                                    <option value="3">雑貨類</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group w-40">
+                                <label for="origin">産地</label>
+                                <select id="origin" name="origin" class="form-control" placeholder="産地">
+                                    <option value="1">ブラジル</option>
+                                    <option value="2">エチオピア</option>
+                                    <option value="3">コロンビア</option>
+                                    <option value="4">ジャマイカ</option>
+                                    <option value="5">ハワイ</option>
+                                    <option value="6">グアテマラ</option>
+                                    <option value="7">その他</option>
+                                </select>
+                                <div id="origin" class="form-text text-muted fs-6">※商品の種類で「コーヒー豆」を選んだ場合のみ選択してください</div>
+                            </div>
                         </div>
 
-                        <div class="form-group">
-                            <label for="detail">産地</label>
-                            <input type="text" class="form-control" id="detail" name="detail" placeholder="産地">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="detail">消費期限</label>
-                            <input type="text" class="form-control" id="detail" name="detail" placeholder="消費期限">
-                        </div>
-
-                        <div class="form-group">
+                        <div class="form-group mb-4">
                             <label for="detail">詳細</label>
                             <input type="text" class="form-control" id="detail" name="detail" placeholder="詳細説明">
+                            <div id="detail" class="form-text text-muted fs-6">※1000文字以内で入力してください</div>
+                        </div> 
+
+                        <div class="form-group">
+                            <label for="image">商品の写真を選択してください</label><br>
+                            <input type="file" id="image" name="image" onchange="preview(this)"; accept=".jpg, .jpeg, .png"/>
+                            <div id="image" class="form-text text-muted fs-6">※.jpg、.jpeg、.pngのみ対応</div>
                         </div>
 
                     </div>
 
-                    <div class="card-footer">
+ 
+                    <div class="card-footer text-center">
                         <button type="submit" class="btn btn-primary">登録</button>
                     </div>
                 </form>

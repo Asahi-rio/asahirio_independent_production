@@ -54,4 +54,12 @@ class ItemController extends Controller
 
         return view('item.add');
     }
+
+    /**
+     * 商品説明画面(仮)
+     */
+    public function description(){
+        return view('item.description');
+    }
+
 }

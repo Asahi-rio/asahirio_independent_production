@@ -15,7 +15,7 @@
                     <div class="card-tools">
                         <div class="input-group input-group-sm">
                             <div class="input-group-append">
-                                <a href="{{ url('items/add') }}" class="btn btn-default">商品登録</a>
+                                <a href="{{ url('items/add') }}" class="btn btn-default">商品を登録する</a>
                             </div>
                         </div>
                     </div>
@@ -24,10 +24,11 @@
                     <table class="table table-hover text-nowrap">
                         <thead>
                             <tr>
-                                <th>ID</th>
-                                <th>名前</th>
-                                <th>種別</th>
-                                <th>詳細</th>
+                                <th class='w-10'>ID</th>
+                                <th class='w-30'>名前</th>
+                                <th class='w-20'>商品の種類</th>
+                                <th class='w-20'>産地</th>
+                                <th class='w-20'>詳細</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -36,7 +37,8 @@
                                     <td>{{ $item->id }}</td>
                                     <td>{{ $item->name }}</td>
                                     <td>{{ $item->type }}</td>
-                                    <td>{{ $item->detail }}</td>
+                                    <td>{{ $item->origin }}</td>
+                                    <td><a class="btn btn-outline-primary btn-sm" href="{{ route('description', ['id' => $item->id]) }}">詳細</a></td>
                                 </tr>
                             @endforeach
                         </tbody>
