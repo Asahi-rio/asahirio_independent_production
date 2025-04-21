@@ -16,7 +16,7 @@ return new class extends Migration
             $table->bigInteger('user_id')->unsigned()->index();
             $table->string('name', 100)->index();
             $table->smallInteger('type');
-            $table->string('origin',20);
+            $table->smallInteger('origin')->nullable();
             $table->string('detail', 1000);
             $table->timestamps();
         });

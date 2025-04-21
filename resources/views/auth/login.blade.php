@@ -8,7 +8,7 @@
                 <div class="card-header text-center fs-3">{{ __('ログイン画面') }}</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('login') }}">
+                    <form method="POST" action="{{ route('signin') }}">
                         @csrf
 
                         <div class="row mb-3">
@@ -17,11 +17,13 @@
                             <div class="col-md-6">
                                 <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
 
-                                @error('email')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                                <!-- 'error' 用のエラーメッセージを別で表示 -->
+                                @if (session('error'))
+                                    <div class="alert alert-danger">
+                                        {{ session('error') }}
+                                    </div>
+                                @endif
+                                
                             </div>
                         </div>
 

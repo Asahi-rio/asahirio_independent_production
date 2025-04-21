@@ -292,14 +292,14 @@ return [
     'menu' => [
         [
             'text' => '商品一覧',
-            'url'  => 'items',
+            'route'  => 'item.index',
             'icon' => 'fas fa-gamepad',
             
         ],            
         
         [
             'text' => '商品登録',
-            'url'  => 'items/add',
+            'route' => 'item.add',
             'icon' => 'bi bi-send',
         ],
 

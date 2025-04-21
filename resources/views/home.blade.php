@@ -3,11 +3,14 @@
 @section('title', 'Dashboard')
 
 @section('content_header')
-    <h1>Dashboard</h1>
+    <h1>ダッシュボード</h1>
 @stop
 
 @section('content')
-    
+<div>
+    <img src="{{ asset('img/homeimage.jpg') }}" alt="">
+</div>
+
 @stop
 
 
