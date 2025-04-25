@@ -47,6 +47,10 @@ class LoginController extends Controller
             'email' => ['required', 'string', 'email', 'max:255'],//メールは必須の255文字以内
             'password' => ['required', 'string', 'min:8','max:255'],//パスワードは必須の8文字以上255文字以内
         ],[
+            //み入力エラー
+            'email.required' => 'メールアドレスを入力してください',
+            'password.required' => 'パスワードを入力してください',
+            //文字数オーバー
             'email.max' => 'メールアドレスを255文字以内で入力してください',
             'password.max' => 'パスワードを255文字以内でで入力してください',
             ///パスワードが8文字以上で入力されていない場合

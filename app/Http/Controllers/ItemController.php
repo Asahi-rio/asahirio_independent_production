@@ -27,7 +27,7 @@ class ItemController extends Controller
         $search = $request->input('search');
     
         $types = [
-            1 => 'コーヒー豆',
+            1 => 'コーヒー',
             2 => 'その他材料',
             3 => '雑貨類',
         ];
@@ -67,7 +67,7 @@ class ItemController extends Controller
     {
         return [
             'types' => [
-                1 => 'コーヒー豆',
+                1 => 'コーヒー',
                 2 => 'その他材料',
                 3 => '雑貨類',
             ],
@@ -99,7 +99,7 @@ class ItemController extends Controller
         $data = $this->getFormData();
 
         $types = [
-            1 => 'コーヒー豆',
+            1 => 'コーヒー',
             2 => 'その他材料',
             3 => '雑貨類',
         ];
@@ -121,6 +121,9 @@ class ItemController extends Controller
             'detail' => 'required|max:1000',
             'origin' => 'nullable', // origin が null の場合を許容
         ],[
+            //フォーム未入力
+            'name.required' => '商品名を入力してください',
+            'detail.required' => '商品の詳細を記入してください',
             ///フォームの入力値が最大を超えた場合
             'name.max' => '商品名は100文字以内で入力してください',
             'detail.max' => '商品の詳細は1000字以内で入力してください', 
@@ -157,11 +160,33 @@ class ItemController extends Controller
     }
 
     /**
-     * 商品説明画面(仮)
+     * 商品詳細画面
      */
     public function description($id)
     {
-        $item = Item::findOrFail($id);
+        $item = Item::findOrFail($id);  
+
+        // 種類・産地の変換表
+            $typeList = [
+                1 => 'コーヒー',
+                2 => 'その他材料',
+                3 => '雑貨類',
+            ];
+
+            $originList = [
+                1 => 'ブラジル',
+                2 => 'コロンビア',
+                3 => 'エチオピア',
+                4 => 'ジャマイカ',
+                5 => 'ハワイ',
+                6 => 'グアテマラ',
+                7 => 'その他',
+            ];
+
+            // 番号 → 文字列に変換してビューに渡す
+            $item->type_name = $typeList[$item->type] ?? '';
+            $item->origin_name = $originList[$item->origin] ?? '';           
+
         return view('item.description', compact('item'));
     }
 
@@ -170,8 +195,20 @@ class ItemController extends Controller
      */
     public function edit($id)
     {
+
         $item = Item::findOrFail($id);
-        return view('item.edit', compact('item'));
+
+        $origins = [
+            1 => 'ブラジル',
+            2 => 'コロンビア',
+            3 => 'エチオピア',
+            4 => 'ジャマイカ',
+            5 => 'ハワイ',
+            6 => 'グアテマラ',
+            7 => 'その他',
+        ];
+
+        return view('item.edit', compact('item','origins'));
     }
 
 
@@ -188,6 +225,10 @@ class ItemController extends Controller
             'detail' => 'required|max:1000',
             'origin' => 'nullable', // origin が null の場合を許容
         ],[
+            //フォーム未入力
+            'name.required' => '商品名を入力してください',
+            'detail.required' => '商品の詳細を記入してください',
+
             'name.max' => '商品名は100文字以内で入力してください',
             'detail.max' => '商品の詳細は1000字以内で入力してください', 
         ]);

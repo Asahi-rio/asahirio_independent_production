@@ -66,6 +66,10 @@ class RegisterController extends Controller
             'password' => ['required', 'string', 'min:8','max:255', 'confirmed'],//パスワードは必須の8文字以上255文字以内
             'password_confirmation' => ['required','string','min:8','max:255','same:password'], //確認用パスワード欄
         ],[
+            //み入力エラー
+            'name.required' => '名前を入力してください',
+            'email.required' => 'メールアドレスを入力してください',
+            'password.required' => 'パスワードを入力してください',
             ///フォームの入力値がmax超えた場合だった場合
             'name.max' => 'ユーザーネームを255文字以内で入力してください',
             'email.max' => 'メールアドレスを255文字以内で入力してください',
@@ -76,7 +80,7 @@ class RegisterController extends Controller
             ///パスワードと確認用パスが一致しない場合
             'password.confirmed' => 'パスワードと確認用パスワードが一致しません',
             ///メールアドレスが重複している場合
-            'email.unique' => 'このメールアドレスは既に登録されています',  
+            'email.unique' => 'このアカウントは既に登録されています',  
         ]);  
 
         //ユーザーモデルを使ってデータベースに新しいユーザーを登録

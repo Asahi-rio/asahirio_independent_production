@@ -24,7 +24,7 @@
             @endif
 
             <div class="card card-primary">
-                <form method="POST" action="{{ route('item.store') }}">
+                <form method="POST" id="addform" action="{{ route('item.store') }}">
                     @csrf
                     <div class="card-body">
                         <div class="form-group mb-5">
@@ -47,13 +47,13 @@
 
                             <div class="form-group w-40">
                                 <label for="origin">産地</label>
-                                <select id="origin" name="origin" class="form-control" placeholder="産地">
-                                    <option value="" disabled selected>選択してください</option><!--初期値の空のオプション--> 
+                                <select id="origin" name="origin" class="form-control">
+                                    <option value="" disabled {{ old('origin') === null ? 'selected' : '' }}>産地を選択してください</option>
                                     @foreach ($origins as $key => $origin)
-                                        <option value="{{ $key }}" {{ old('origin', null) == $key ? 'selected' : '' }}>{{ $origin }}</option>
+                                        <option value="{{ $key }}" {{ old('origin', 1) == $key ? 'selected' : '' }}>{{ $origin }}</option>
                                     @endforeach
                                 </select>
-                                <div id="origin" class="form-text text-muted fs-6">※商品の種類で「コーヒー豆」を選んだ場合のみ選択してください</div>
+                                <div id="origin" class="form-text text-muted fs-6">※商品の種類で「コーヒー」を選んだ場合のみ選択してください</div>
                             </div>
                         </div>
 
@@ -84,10 +84,12 @@
     document.addEventListener('DOMContentLoaded', function () {
         const typeSelect = document.getElementById('type');
         const originInput = document.getElementById('origin');
+        let previousOriginValue = originInput.value; // 初期状態を保存
 
         const toggleOtherField = () => {
             if (typeSelect.value !== '1') {
                 //typeが1の時にoriginを無効化
+                previousOriginValue = originInput.value;
                 originInput.disabled = true; // originを無効化
                 originInput.style.backgroundColor = '#eee'; // 背景色をグレーに
                 originInput.value = ''; // originの値を消す
@@ -95,6 +97,7 @@
                 //typeが1の時にoriginを有効化
                 originInput.disabled = false; // originを有効化
                 originInput.style.backgroundColor = ''; // 背景色を元に戻す
+                originInput.value = previousOriginValue;
             }
         };
 
@@ -103,12 +106,13 @@
 
         // typeが変更されたときにoriginの表示を切り替え
         typeSelect.addEventListener('change', toggleOtherField);
+
     });   
 </script>
 
 <!--同じ名前でアイテム登録しようとすると、アラートが表示される-->
 <script>
-document.querySelector('form').addEventListener('submit', async function (e) {
+document.querySelector('#addform').addEventListener('submit', async function (e) {
     e.preventDefault();
 
     const name = document.getElementById('name').value;
@@ -125,11 +129,13 @@ document.querySelector('form').addEventListener('submit', async function (e) {
     const data = await res.json();
 
     if (data.exists) {
-        alert('同じ名前の商品が既に登録されています');
-        return; // 重複していたら登録しない
+        const result = confirm('同じ名前の商品が既に登録されています。本当に登録しますか？');
+        if (!result) {
+            return; // キャンセルなら何もしない
+        }
     }
 
-    // 重複していないのでフォームを送信
+    // 登録OKなのでフォームを送信
     e.target.submit();
 });
 </script>

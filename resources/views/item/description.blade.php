@@ -24,9 +24,9 @@
                         <dt>名前 :</dt>
                         <dd>{{ $item->name }}</dd>
                         <dt>商品の種類 :</dt>
-                        <dd>{{ $item->type }}</dd>
+                        <dd>{{ $item->type_name }}</dd>
                         <dt>産地 :</dt>
-                        <dd>{{ $item->origin }}</dd>
+                        <dd>{{ $item->origin_name }}</dd>
                     </dl>
                 </div>
             </div>

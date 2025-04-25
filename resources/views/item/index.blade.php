@@ -26,7 +26,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-body table-responsive p-0">
+                <div class="card-body table-responsive p-0 mb-3">
                     <table class="table table-hover text-nowrap">
                         <thead>
                             <tr>
@@ -63,8 +63,8 @@
                 </div>
 
                 <!-- ページネーションを追加 -->
-                <div class="card-footer clearfix">
-                    {{ $items->appends(['search' => $search])->links() }}
+                <div class="d-flex justify-content-center">
+                    {{ $items->links('pagination::bootstrap-5') }}
                 </div>
             </div>
         </div>

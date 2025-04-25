@@ -26,7 +26,7 @@
         @endif
 
         <div class="card card-primary">
-            <form method="POST" action="{{ route('item.update', ['id' => $item->id]) }}">
+            <form id="edit-form" method="POST" action="{{ route('item.update', ['id' => $item->id]) }}">
                 @csrf
                 @method('PUT')
 
@@ -35,6 +35,7 @@
                         <label for="name">商品名</label>
                         <input type="text" class="form-control" id="name" name="name" value="{{ $item->name }}">
                         <div id="name-help" class="form-text text-muted fs-6">※商品名は100文字以内で入力してください</div>
+
                         <!--エラーメッセージ-->
                         <div id="name-error" class="form-text text-danger fs-6" style="display: none;"></div>
                     </div>
@@ -43,7 +44,7 @@
                         <div class="form-group w-50">
                             <label for="type">商品の種類</label>
                             <select name="type" id="type" class="form-control">
-                                <option value="1" {{ $item->type == 1 ? 'selected' : '' }}>コーヒー豆</option>
+                                <option value="1" {{ $item->type == 1 ? 'selected' : '' }}>コーヒー</option>
                                 <option value="2" {{ $item->type == 2 ? 'selected' : '' }}>その他材料</option>
                                 <option value="3" {{ $item->type == 3 ? 'selected' : '' }}>雑貨類</option>
                             </select>
@@ -51,18 +52,13 @@
 
                         <div class="form-group w-40">
                             <label for="origin">産地</label>
-                            <div class="form-group mb-3">
-                                <select name="origin" id="origin" class="form-control">
-                                    <option value="1" {{ $item->origin == 1 ? 'selected' : '' }}>ブラジル</option>
-                                    <option value="2" {{ $item->origin == 2 ? 'selected' : '' }}>コロンビア</option>
-                                    <option value="3" {{ $item->origin == 3 ? 'selected' : '' }}>エチオピア</option>
-                                    <option value="4" {{ $item->origin == 4 ? 'selected' : '' }}>ジャマイカ</option>
-                                    <option value="5" {{ $item->origin == 5 ? 'selected' : '' }}>ハワイ</option>
-                                    <option value="6" {{ $item->origin == 6 ? 'selected' : '' }}>グアテマラ</option>
-                                    <option value="7" {{ $item->origin == 7 ? 'selected' : '' }}>その他</option>
-                                </select>
-                            </div>
-                            <div id="origin" class="form-text text-muted fs-6">※商品の種類で「コーヒー豆」を選んだ場合のみ選択してください</div>
+                            <select id="origin" name="origin" class="form-control">
+                                <option value="" disabled {{ old('origin') === null ? 'selected' : '' }}>産地を選択してください</option>
+                                    @foreach ($origins as $key => $origin)
+                                        <option value="{{ $key }}" {{ old('origin', 1) == $key ? 'selected' : '' }}>{{ $origin }}</option>
+                                    @endforeach
+                            </select>
+                            <div id="origin" class="form-text text-muted fs-6">※商品の種類で「コーヒー」を選んだ場合のみ選択してください</div>
                         </div>
                     </div>
 
@@ -97,19 +93,25 @@
 
 @section('js')
 <!--フォームの選択、タイプでコーヒーを選ぶとoriginが入力できるようになる-->
+<!--originのnullable-->
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const typeSelect = document.getElementById('type');
         const originInput = document.getElementById('origin');
+        let previousOriginValue = originInput.value; // 初期状態を保存
 
         const toggleOtherField = () => {
             if (typeSelect.value !== '1') {
+                //typeが1の時にoriginを無効化
+                previousOriginValue = originInput.value;
                 originInput.disabled = true; // originを無効化
                 originInput.style.backgroundColor = '#eee'; // 背景色をグレーに
                 originInput.value = ''; // originの値を消す
             } else {
+                //typeが1の時にoriginを有効化
                 originInput.disabled = false; // originを有効化
                 originInput.style.backgroundColor = ''; // 背景色を元に戻す
+                originInput.value = previousOriginValue;
             }
         };
 
@@ -118,15 +120,17 @@
 
         // typeが変更されたときにoriginの表示を切り替え
         typeSelect.addEventListener('change', toggleOtherField);
+
     });   
 </script>
 
 <!--同じ名前でアイテム登録しようとすると、アラートが表示される-->
 <script>
-document.querySelector('form').addEventListener('submit', async function (e) {
+document.getElementById('edit-form').addEventListener('submit', async function (e) {
     e.preventDefault();
 
     const name = document.getElementById('name').value;
+    const itemId = {{ $item->id }}; // 自分自身のIDを渡す
 
     const res = await fetch("{{ route('item.checkName') }}", {
         method: 'POST',
@@ -134,17 +138,19 @@ document.querySelector('form').addEventListener('submit', async function (e) {
             'Content-Type': 'application/json',
             'X-CSRF-TOKEN': '{{ csrf_token() }}'
         },
-        body: JSON.stringify({ name: name })
+        body: JSON.stringify({ name: name, ignore_id: itemId }) // ここでIDも送信
     });
 
     const data = await res.json();
 
     if (data.exists) {
-        alert('同じ名前の商品が既に登録されています');
-        return; // 重複していたら登録しない
+        const result = confirm('同じ名前の商品が既に存在します。本当に保存しますか？');
+        if (!result) {
+            return;
+        }
     }
 
-    // 重複していないのでフォームを送信
+    // 通過OKならフォーム送信
     e.target.submit();
 });
 </script>
